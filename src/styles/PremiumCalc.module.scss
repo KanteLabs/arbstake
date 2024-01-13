@@ -1,0 +1,49 @@
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+
+  img {
+    margin-right: 1rem;
+  }
+
+  .input, .output {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.input {
+  margin-bottom: 1.25rem;
+  width: 230px;
+  input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #fafafa;
+    font-size: 1.25rem;
+    outline: none;
+    padding: 1rem 0rem 0.75rem;
+    width: 100%;
+  }
+}
+
+.output {
+  display: flex;
+  text-align: right;
+  font-size: 1.25rem;
+  font-weight: bold;
+  width: 65%;
+}
+
+.trade_info {
+  margin-top: 1.25rem;
+}
+
+.trade_info_section {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #bbb;
+  margin-top: 1.5rem;
+  width: 100%;
+}
