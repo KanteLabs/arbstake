@@ -1,4 +1,3 @@
-
 type Props = {
   children?: React.ReactNode;
   className?: string;
@@ -8,20 +7,19 @@ type Props = {
   lineHeight?: string;
   letterSpacing?: string;
   textAlign?: string;
-  tag?: 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
+  tag?: "p" | "span" | "h1" | "h2" | "h3" | "h4" | "h5";
   title?: string;
-}
+};
 
-const FONT_FAMILY = "Comfortaa, ui-monospace, monospace"
+const FONT_FAMILY = "Comfortaa, ui-monospace, monospace";
 
 const Text = ({
   children,
   className,
-  tag: Tag = 'span',
+  tag: Tag = "span",
   title,
   ...rest
 }: Props) => {
-
   const style = {
     ...rest,
     fontFamily: FONT_FAMILY,
@@ -31,8 +29,7 @@ const Text = ({
     <Tag className={className} title={title} style={style}>
       {children}
     </Tag>
-  )
-}
+  );
+};
 
 export default Text;
-
