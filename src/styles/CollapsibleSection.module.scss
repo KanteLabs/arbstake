@@ -1,0 +1,30 @@
+.collapsible {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+  width: 100%;
+}
+
+.content {
+  padding: 0 1.25rem;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.6s ease-out;
+}
+
+.active {
+  height: 125px !important;
+}
+
+.arrow {
+  display: flex;
+  position: relative;
+  div {
+    position: absolute;
+    transform: rotate(90deg);
+    right: 0;
+    top: -2.1rem;
+    height: 51px;
+  }
+}
