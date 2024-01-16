@@ -55,17 +55,16 @@ const PremiumCalc = () => {
     }
   }, []);
 
-  const { deposit_fee, output, pnl, ratioPNL } = useMemo(() => {
+  const { output, pnl, ratioPNL } = useMemo(() => {
     const _amount = amount ? Number(amount) : 0;
     const output = _amount * PREMIUM_RATIO;
     const ratioPNL = output - _amount * BASE_RATIO;
 
-    console.log({ output, PREMIUM_RATIO });
-
     // fees
+    // only used when minting rETH
     const deposit_fee = output * rETH_PROTOCOL_FEE;
 
-    const pnl = ratioPNL - GAS_COST - deposit_fee;
+    const pnl = ratioPNL - GAS_COST;
 
     return {
       amount,
@@ -137,15 +136,6 @@ const PremiumCalc = () => {
                   <Text color="#23CE6B" tag="span" title="pnl">
                     {" "}
                     {numberFormatter.compact(ratioPNL)} eth
-                  </Text>
-                </Text>
-              </div>
-              <div className={styles.trade_info}>
-                <Text tag="h5">
-                  deposit fee:
-                  <Text color="#DB3A34" tag="span" title="gas">
-                    {" "}
-                    {numberFormatter.compact(deposit_fee)} eth
                   </Text>
                 </Text>
               </div>
