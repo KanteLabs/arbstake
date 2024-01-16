@@ -4,6 +4,14 @@
   outline: none;
   text-align: left;
   width: 100%;
+
+  .arrow div:hover {
+    color: #fafa;
+  }
+}
+
+.collapsible:hover .arrow div {
+  color: #fafa;
 }
 
 .content {
@@ -23,8 +31,10 @@
   div {
     position: absolute;
     transform: rotate(90deg);
-    right: 0;
+    font-size: 1.25rem;
+    right: 1rem;
     top: -2.1rem;
     height: 51px;
+    transition: all 0.25s linear;
   }
 }

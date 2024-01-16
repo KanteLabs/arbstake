@@ -5,16 +5,29 @@ import { useCallback, useMemo, useState } from "react";
 import styles from "@/styles/PremiumCalc.module.scss";
 import Image from "next/image";
 import CollapsibleSection from "../CollapsibleSection";
+import useGetRatio from "@/hooks/useGetRatio";
 
-const BASE_RATIO = 1.094827;
-const PREMIUM_RATIO = 1.098467;
-const PREMIUM_PERCENTAGE = ((PREMIUM_RATIO - BASE_RATIO) / BASE_RATIO) * 100;
-const RATIO_TYPE = PREMIUM_PERCENTAGE > 0 ? "premium" : "discount";
+// const BASE_RATIO = 1.094827;
+// const PREMIUM_RATIO = 1.098467;
+// const PREMIUM_PERCENTAGE = ((PREMIUM_RATIO - BASE_RATIO) / BASE_RATIO) * 100;
+// const RATIO_TYPE = PREMIUM_PERCENTAGE > 0 ? "premium" : "discount";
+const rETH_PROTOCOL_FEE = 0.0005;
 const GAS_COST = 0.01125;
 
 const PremiumCalc = () => {
   const [amount, setAmount] = useState<string>();
   const [amountToDisplay, setAmountToDisplay] = useState<string>();
+
+  const { data = {} } = useGetRatio();
+
+  const {
+    rate: {
+      base: BASE_RATIO,
+      market: PREMIUM_RATIO,
+      percent: PREMIUM_PERCENTAGE,
+      status: RATIO_TYPE,
+    } = {} as any,
+  } = data;
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const isNumber = e.target.value.match(/^[0-9]*\.?[0-9]*$/);
@@ -47,8 +60,10 @@ const PremiumCalc = () => {
     const output = _amount * PREMIUM_RATIO;
     const ratioPNL = output - _amount * BASE_RATIO;
 
+    console.log({ output, PREMIUM_RATIO });
+
     // fees
-    const deposit_fee = output * 0.001;
+    const deposit_fee = output * rETH_PROTOCOL_FEE;
 
     const pnl = ratioPNL - GAS_COST - deposit_fee;
 
@@ -59,7 +74,7 @@ const PremiumCalc = () => {
       pnl,
       ratioPNL,
     };
-  }, [amount]);
+  }, [BASE_RATIO, PREMIUM_RATIO, amount]);
 
   const tradeOutcome = useMemo(() => {
     if (!pnl) return undefined;
@@ -67,11 +82,11 @@ const PremiumCalc = () => {
     return val > 0
       ? {
           label: "earn",
-          color: "#83B037",
+          color: "#23CE6B",
         }
       : {
           label: "lose",
-          color: "#B80012",
+          color: "#DB3A34",
         };
   }, [pnl]);
 
@@ -79,7 +94,7 @@ const PremiumCalc = () => {
     <Block>
       <div className={styles.trade_info}>
         <Text tag="span">there is a current market {RATIO_TYPE} of: </Text>
-        <Text color="#83B037" tag="span" title="premium">
+        <Text color="#23CE6B" tag="span" title="premium">
           {numberFormatter.format(PREMIUM_PERCENTAGE)}%
         </Text>
       </div>
@@ -119,7 +134,7 @@ const PremiumCalc = () => {
               <div className={styles.trade_info}>
                 <Text tag="h5">
                   premium:
-                  <Text color="#83B037" tag="span" title="pnl">
+                  <Text color="#23CE6B" tag="span" title="pnl">
                     {" "}
                     {numberFormatter.compact(ratioPNL)} eth
                   </Text>
@@ -128,7 +143,7 @@ const PremiumCalc = () => {
               <div className={styles.trade_info}>
                 <Text tag="h5">
                   deposit fee:
-                  <Text color="#B80012" tag="span" title="gas">
+                  <Text color="#DB3A34" tag="span" title="gas">
                     {" "}
                     {numberFormatter.compact(deposit_fee)} eth
                   </Text>
@@ -137,7 +152,7 @@ const PremiumCalc = () => {
               <div className={styles.trade_info}>
                 <Text tag="h5">
                   gas fee:
-                  <Text color="#B80012" tag="span" title="gas">
+                  <Text color="#DB3A34" tag="span" title="gas">
                     {" "}
                     {numberFormatter.compact(GAS_COST)} eth
                   </Text>
