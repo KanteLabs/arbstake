@@ -7,12 +7,11 @@ import Image from "next/image";
 import CollapsibleSection from "../CollapsibleSection";
 import useGetRatio from "@/hooks/useGetRatio";
 
-// const BASE_RATIO = 1.094827;
-// const PREMIUM_RATIO = 1.098467;
-// const PREMIUM_PERCENTAGE = ((PREMIUM_RATIO - BASE_RATIO) / BASE_RATIO) * 100;
-// const RATIO_TYPE = PREMIUM_PERCENTAGE > 0 ? "premium" : "discount";
 const rETH_PROTOCOL_FEE = 0.0005;
-const GAS_COST = 0.01125;
+const GAS_COST = 0.00578945;
+
+const GREEN = "#23CE6B";
+const RED = "#DB3A34";
 
 const PremiumCalc = () => {
   const [amount, setAmount] = useState<string>();
@@ -40,7 +39,6 @@ const PremiumCalc = () => {
       return;
     }
     if (isValid) {
-      console.log(e.target.value, isDecimal, isNumber);
       setAmount(e.target.value);
       isDecimal
         ? setAmountToDisplay(e.target.value)
@@ -49,7 +47,6 @@ const PremiumCalc = () => {
       const filter = e.target.value.replace(/[^0-9.]/g, "");
       // remove comma
       const commaRemoved = filter.replace(/,/g, "");
-      console.log(commaRemoved, "commaRemoved");
       setAmount(commaRemoved);
       setAmountToDisplay(numberFormatter.format(commaRemoved));
     }
@@ -81,20 +78,25 @@ const PremiumCalc = () => {
     return val > 0
       ? {
           label: "earn",
-          color: "#23CE6B",
+          color: GREEN,
         }
       : {
           label: "lose",
-          color: "#DB3A34",
+          color: RED,
         };
   }, [pnl]);
+
+  const ratioColor = useMemo(() => {
+    if (!PREMIUM_PERCENTAGE) return undefined;
+    return PREMIUM_PERCENTAGE > 0 ? GREEN : RED;
+  }, [PREMIUM_PERCENTAGE]);
 
   return (
     <Block>
       <div className={styles.trade_info}>
-        <Text tag="span">there is a current market {RATIO_TYPE} of: </Text>
-        <Text color="#23CE6B" tag="span" title="premium">
-          {numberFormatter.format(PREMIUM_PERCENTAGE)}%
+        <Text tag="span">the current market {RATIO_TYPE} is </Text>
+        <Text color={ratioColor} tag="span" title="premium">
+          {numberFormatter.format(Math.abs(PREMIUM_PERCENTAGE), 4)}%
         </Text>
       </div>
       <div className={styles.form}>
@@ -132,8 +134,8 @@ const PremiumCalc = () => {
             >
               <div className={styles.trade_info}>
                 <Text tag="h5">
-                  premium:
-                  <Text color="#23CE6B" tag="span" title="pnl">
+                  {RATIO_TYPE}:
+                  <Text color={GREEN} tag="span" title="pnl">
                     {" "}
                     {numberFormatter.compact(ratioPNL)} eth
                   </Text>
@@ -142,7 +144,7 @@ const PremiumCalc = () => {
               <div className={styles.trade_info}>
                 <Text tag="h5">
                   gas fee:
-                  <Text color="#DB3A34" tag="span" title="gas">
+                  <Text color={RED} tag="span" title="gas">
                     {" "}
                     {numberFormatter.compact(GAS_COST)} eth
                   </Text>
